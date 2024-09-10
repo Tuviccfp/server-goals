@@ -13,6 +13,8 @@
   "description": "",
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^22.5.4",
     "@types/uuid": "^10.0.0",
     "drizzle-kit": "^0.24.2",
