@@ -16,15 +16,25 @@ export async function goalsRoutes(fastify: FastifyInstance) {
     '/create-goals',
     { preHandler: [authenticate] },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { title, desiredWeeklyFrequency } = goalSchema.parse(request.body)
+      const body = goalSchema.parse(request.body)
+      const userId = request.user?.id
       try {
+        if (!userId) {
+          return reply.status(404).send({ messager: 'User ID is missing' })
+        }
         await createGoals({
-          title,
-          desiredWeeklyFrequency,
+          title: body.title,
+          desiredWeeklyFrequency: body.desiredWeeklyFrequency,
+          userId: userId,
         })
+
+        console.log(authenticate, 'linha 26')
         reply.status(201).send({ message: 'Goals created successfully' })
       } catch (error) {
-        reply.status(500).send({ error: 'Error creating goals' })
+        reply
+          .status(500)
+          .send({ error: 'Error creating goals', message: error })
+        console.log(error)
       }
     }
   )

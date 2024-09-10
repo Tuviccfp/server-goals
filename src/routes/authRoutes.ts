@@ -34,8 +34,9 @@ export async function authRoutes(fastify: FastifyInstance) {
           updatedAt: new Date(),
         })
         reply.send({ message: 'User created sucessful' })
-      } catch (error) {}
-      reply.status(500).send({ error: 'Error register new User' })
+      } catch (error) {
+        reply.status(500).send({ error: 'Error register new User' })
+      }
     }
   )
 

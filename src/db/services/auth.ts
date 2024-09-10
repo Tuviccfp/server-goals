@@ -29,8 +29,7 @@ export const verifyToken = (token: string) => {
 
 export async function authenticate(
   request: FastifyRequest,
-  reply: FastifyReply,
-  done: () => void
+  reply: FastifyReply
 ) {
   try {
     const authHeader = request.headers.authorization
@@ -38,12 +37,15 @@ export async function authenticate(
     if (!authHeader?.startsWith('Bearer ') || !authHeader) {
       return reply.status(401).send({ error: 'Invalid token authorization' })
     }
+    console.log(authHeader, 'linha 40')
     const token = authHeader.split(' ')[1]
-    const decoded = verifyToken(token) as { id: string }
-    request.user = { id: decoded.id }
+    console.log(token, 'linha 42')
+    const decoded = jwt.verify(token, env.JWT_SECRET as string) as {
+      id: string
+    }
 
-    done()
+    request.user = { id: decoded.id }
   } catch (error) {
-    reply.status(401).send({ error: 'Invalid token' })
+    reply.status(401).send({ error: 'Invalid token', message: error })
   }
 }
