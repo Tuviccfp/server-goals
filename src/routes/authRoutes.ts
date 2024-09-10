@@ -22,7 +22,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           .from(userTable)
           .where(eq(userTable.email, email))
         if (existingUser.length > 0) {
-          return reply.status(404).send({ error: 'User already exists' })
+          return reply.status(400).send({ error: 'User already exists' })
         }
         const hashedPassword = await hashPass(password)
 
@@ -36,6 +36,28 @@ export async function authRoutes(fastify: FastifyInstance) {
         reply.send({ message: 'User created sucessful' })
       } catch (error) {}
       reply.status(500).send({ error: 'Error register new User' })
+    }
+  )
+
+  fastify.post(
+    '/login',
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { email, password } = userSchema.parse(request.body)
+
+      try {
+        const user = await fastify.db
+          .select()
+          .from(userTable)
+          .where(eq(userTable.email, email))
+        const isValid = await comparePass(password, user[0].passwordHash)
+        if (!user && !isValid) {
+          return reply.status(404).send({ error: 'Invalid credentials' })
+        }
+        const token = generateToken(user[0].id)
+        reply.send({ token })
+      } catch (error) {
+        return reply.status(500).send({ error: 'Error login User' })
+      }
     }
   )
 }
