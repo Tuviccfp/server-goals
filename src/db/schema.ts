@@ -37,6 +37,10 @@ export const userTable = pgTable('user_table', {
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   passwordHash: text('password').notNull(),
+  goals: text('goals').references(() => goals.id),
+  goalsCompletions: text('goals_completions').references(
+    () => goalsCompletions.id
+  ),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
