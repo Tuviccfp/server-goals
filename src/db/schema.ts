@@ -30,12 +30,12 @@ export const goalsCompletions = pgTable('goals_completions', {
     .defaultNow(),
 })
 
-const userTable = pgTable('user_table', {
+export const userTable = pgTable('user_table', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  username: text('username').unique().notNull(),
-  email: text('email').unique().notNull(),
+  username: text('username').notNull().unique(),
+  email: text('email').notNull().unique(),
   passwordHash: text('password').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()

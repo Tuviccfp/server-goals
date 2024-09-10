@@ -1,7 +1,11 @@
 import fastify from 'fastify'
+import { db } from '../db'
+import { authRoutes } from '../routes/authRoutes'
 
 const app = fastify()
 
+app.decorate('db', db)
+app.register(authRoutes)
 app
   .listen({ port: 3333 })
   .then(() => {

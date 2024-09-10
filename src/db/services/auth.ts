@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { env } from '../env'
+import { env } from '../../env'
 
 export const hashPass = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10)
