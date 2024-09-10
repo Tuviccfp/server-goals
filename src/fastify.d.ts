@@ -6,9 +6,4 @@ declare module 'fastify' {
   interface FastifyInstance {
     db: ReturnType<typeof drizzle>
   }
-  interface FastifyRequest {
-    user?: {
-      id: string
-    }
-  }
 }
