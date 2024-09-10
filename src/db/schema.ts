@@ -29,3 +29,21 @@ export const goalsCompletions = pgTable('goals_completions', {
     .notNull()
     .defaultNow(),
 })
+
+const userTable = pgTable('user_table', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  username: text('username').unique().notNull(),
+  email: text('email').unique().notNull(),
+  passwordHash: text('password').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
+
+export type SelectUser = typeof userTable.$inferSelect
+export type InsertUser = typeof userTable.$inferInsert
